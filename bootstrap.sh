@@ -22,6 +22,7 @@ sed -i s/\#HOME\#/$(echo $HOME | sed 's/\//\\\//g')/g $endpath/rc.lua
 sed -i s/\#HOME\#/$(echo $HOME | sed 's/\//\\\//g')/g $endpath/themes/skymod/theme.lua
 
 ln -s $endpath $HOME/.config/awesome
+cp $enpath/bg-saved.cfg $HOME/.config/nitrogen/bg-saved.cfg
 
 echo "copying Robot font\n"
 cp $endpath/fonts/* $HOME/.fonts/

@@ -3,7 +3,7 @@ Awesome conf
 
 ## Install
 
-Dependencies: awesome, awesome-extra, amixer, nm-applet, parcellite, firefox, git, curl
+Dependencies: awesome, awesome-extra, amixer, nm-applet, nitrogen, arandr, parcellite, firefox, git, curl
 
 ```bash
 

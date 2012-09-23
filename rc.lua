@@ -18,9 +18,11 @@ require("revelation")
 -- Load Debian menu entries
 require("debian.menu")
 
+awful.util.spawn("sh /home/kload/.screenlayout/layout.sh")
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("#HOME#/.config/awesome/themes/skymod/theme.lua")
+beautiful.init("/home/kload/.config/awesome/themes/skymod/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -86,13 +88,20 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-	names = { "Main", "Web", "Dev", "IM", "VBox", "Mus", "Test", "||" },
-	layout = { layouts[2], layouts[3], layouts[2], layouts[2], layouts[2], layouts[4], layouts[3], layouts[5]}
-	}
- 
-for s = 1, screen.count() do
-	tags[s] = awful.tag(tags.names, s, tags.layout)
-end
+	names = { "Main", "Web", "Dev", "IM", "VBox", "||" },
+	layout = { layouts[2], layouts[3], layouts[2], layouts[2], layouts[2], layouts[5]}
+}
+tags2 = {
+	names = { "Dev", "Web", "IM", "Files", "Term", "||" },
+	layout = { layouts[2], layouts[3], layouts[2], layouts[2], layouts[2], layouts[5]}
+
+}
+tags[1] = awful.tag(tags.names, 1, tags.layout)
+tags[2] = awful.tag(tags2.names, 2, tags2.layout)
+
+--for s = 3, screen.count() do
+	--tags[s] = awful.tag(tags.names, s, tags.layout)
+--end
  
 -- }}}
 
@@ -302,6 +311,7 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey,           }, "i", function () awful.util.spawn("pidgin") end),
+    awful.key({ modkey,           }, "g", function () awful.util.spawn("gvim") end),
     awful.key({ modkey,           }, "b", function () awful.util.spawn("banshee") end),
     awful.key({ modkey,           }, "p", function () awful.util.spawn("thunar") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
@@ -456,4 +466,5 @@ run_once("nm-applet")
 run_once("parcellite")
 run_once("firefox")
 awful.util.spawn("wmname LG3D")
+awful.util.spawn("nitrogen --restore")
 awful.util.spawn("xcompmgr -cCfF -o 0.38 -O 20 -I 20 -t 0.02 -l 0.02 -r 3.2 -D2")
