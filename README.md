@@ -1,7 +1,7 @@
 Awesome conf
 ===========
 
-## Install
+### Install
 
 Dependencies: awesome, awesome-extra, amixer, nm-applet, nitrogen, arandr, parcellite, firefox, git, curl
 
@@ -9,3 +9,5 @@ Dependencies: awesome, awesome-extra, amixer, nm-applet, nitrogen, arandr, parce
 
     curl http://kload.fr/awesome-debian | sh
 ```
+
+Used with the Shiki-Noble GTK2 theme and Roboto font
