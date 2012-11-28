@@ -6,9 +6,10 @@
 
 -- BASICS
 theme = {}
-theme.font          = "Roboto Bold 8"
+theme.font          = "Ubuntu Bold 8"
 
-theme.bg_focus      = "#93598D"
+--theme.bg_focus      = "#93598D" Purple
+theme.bg_focus      = "#5b8bbe"
 theme.bg_normal     = "#3C3C3C"
 theme.bg_urgent     = "#D22B31"
 theme.bg_minimize   = "#202020"
@@ -18,9 +19,9 @@ theme.fg_focus      = "#e0e0e0"
 theme.fg_urgent     = "#e0e0e0"
 theme.fg_minimize   = "#e0e0e0"
 
-theme.border_width  = "4"
+theme.border_width  = "2"
 theme.border_normal = "#3C3C3C"
-theme.border_focus  = "#93598D"
+theme.border_focus  = "#5b8bbe"
 theme.border_marked = "#3C3C3C"
 
 -- IMAGES

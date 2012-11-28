@@ -16,17 +16,17 @@ require("naughty")
 require("revelation")
 
 -- Load Debian menu entries
-require("debian.menu")
+--require("debian.menu")
 
-awful.util.spawn("sh /home/kload/.screenlayout/layout.sh")
+awful.util.spawn("sh /home/agavoty/.screenlayout/layout.sh")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/kload/.config/awesome/themes/skymod/theme.lua")
+beautiful.init("/home/agavoty/.config/awesome/themes/skymod/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
-editor = os.getenv("EDITOR") or "gedit"
+terminal = "lxterminal"
+editor = os.getenv("EDITOR") or "gvim"
 editor_cmd = terminal .. " -e " .. editor
 
 
@@ -38,34 +38,34 @@ end
 -- Sound Control
 cardid  = 0
 channel = "Master"
-function volume (mode, widget)
-	if mode == "update" then
-             local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
-             local status = fd:read("*all")
-             fd:close()
+--function volume (mode, widget)
+	--if mode == "update" then
+             --local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
+             --local status = fd:read("*all")
+             --fd:close()
  
-		local volume = string.match(status, "(%d?%d?%d)%%")
-		volume = string.format("% 3d", volume)
+		--local volume = string.match(status, "(%d?%d?%d)%%")
+		--volume = string.format("% 3d", volume)
  
-		status = string.match(status, "%[(o[^%]]*)%]")
+		--status = string.match(status, "%[(o[^%]]*)%]")
  
-		if string.find(status, "on", 1, true) then
-			volume = "Vol:<span color='green'>" .. volume .. "</span>% "
-		else
-			volume = "Vol:<span color='red'>" .. volume .. "</span>M "
-		end
-		widget.text = volume
-	elseif mode == "up" then
-		io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%+"):read("*all")
-		volume("update", widget)
-	elseif mode == "down" then
-		io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%-"):read("*all")
-		volume("update", widget)
-	else
-		io.popen("amixer -c " .. cardid .. " sset " .. channel .. " toggle"):read("*all")
-		volume("update", widget)
-	end
-end
+		--if string.find(status, "on", 1, true) then
+			--volume = "Vol:<span color='green'>" .. volume .. "</span>% "
+		--else
+			--volume = "Vol:<span color='red'>" .. volume .. "</span>M "
+		--end
+		--widget.text = volume
+	--elseif mode == "up" then
+		--io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%+"):read("*all")
+		--volume("update", widget)
+	--elseif mode == "down" then
+		--io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%-"):read("*all")
+		--volume("update", widget)
+	--else
+		--io.popen("amixer -c " .. cardid .. " sset " .. channel .. " toggle"):read("*all")
+		--volume("update", widget)
+	--end
+--end
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -74,11 +74,11 @@ end
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 
--- Table of layouts to cover with awful.layout.inc, order matters.
-layouts =
-{
+-- Window management layouts
+layouts = {
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.tile,
+    awful.layout.suit.tile.bottom,
     awful.layout.suit.floating,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
@@ -88,34 +88,31 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-	names = { "Main", "Web", "Dev", "IM", "VBox", "||" },
-	layout = { layouts[2], layouts[3], layouts[2], layouts[2], layouts[2], layouts[5]}
-}
-tags2 = {
-	names = { "Dev", "Web", "IM", "Files", "Term", "||" },
-	layout = { layouts[2], layouts[3], layouts[2], layouts[2], layouts[2], layouts[5]}
-
-}
+    names = { "Main", "Web", "Dev","IM", "Zik", "|"},
+    layout = { layouts[3], layouts[3], layouts[3], layouts[2], layouts[3], layouts[3]}
+    }
+tagss = {
+    names = { "Files", "Term", "VM","Monitor", "|"},
+    layout = { layouts[3], layouts[3], layouts[3], layouts[2], layouts[3]}
+    }
+--for s = 1, screen.count() do
+    -- Each screen has its own tag table.
 tags[1] = awful.tag(tags.names, 1, tags.layout)
-tags[2] = awful.tag(tags2.names, 2, tags2.layout)
-
---for s = 3, screen.count() do
-	--tags[s] = awful.tag(tags.names, s, tags.layout)
+tags[2] = awful.tag(tagss.names, 2, tagss.layout)
 --end
- 
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
-   { "edit config", "gedit" .. " " .. awful.util.getdir("config") .. "/rc.lua" },
+   { "edit config", "gvim" .. " " .. awful.util.getdir("config") .. "/rc.lua" },
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
+                                    --{ "Debian", debian.menu.Debian_menu.Debian },
                                     { "open terminal", terminal }
                                   }
                         })
@@ -129,18 +126,18 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- Create CPU Temp Widget
 
 -- Create Volume Control Widget
- tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
- tb_volume:buttons(awful.util.table.join(
-	awful.button({ }, 4, function () volume("up", tb_volume) end),
-	awful.button({ }, 5, function () volume("down", tb_volume) end),
-	awful.button({ }, 1, function () volume("mute", tb_volume) end)
- ))
- volume("update", tb_volume)
+ --tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
+ --tb_volume:buttons(awful.util.table.join(
+	--awful.button({ }, 4, function () volume("up", tb_volume) end),
+	--awful.button({ }, 5, function () volume("down", tb_volume) end),
+	--awful.button({ }, 1, function () volume("mute", tb_volume) end)
+ --))
+ --volume("update", tb_volume)
  
 -- refresh the Volume Control Widget
-tb_volume_timer = timer({ timeout = 10 })
-tb_volume_timer:add_signal("timeout", function () volume("update", tb_volume) end)
-tb_volume_timer:start()
+--tb_volume_timer = timer({ timeout = 10 })
+--tb_volume_timer:add_signal("timeout", function () volume("update", tb_volume) end)
+--tb_volume_timer:start()
 
 -- Assign a hook to update temperature
     
@@ -148,30 +145,76 @@ tb_volume_timer:start()
 
 -- Battery widget
 battwidget = widget({ type = "textbox" })
-vicious.register(battwidget, vicious.widgets.bat, ' || Bat: $1$2% :: ', 61, 'BAT1')
+vicious.register(battwidget, vicious.widgets.bat, ' || Bat: $1$2% | ', 61, 'BAT1')
 
 -- Initialize widget
 memwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(memwidget, vicious.widgets.mem, "RAM: $2MB :: ", 13)
+vicious.register(memwidget, vicious.widgets.mem, "RAM: $2MB ", 13)
 
 -- Initialize widget
 cpuwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "CPU: $1% :: ")
+vicious.register(cpuwidget, vicious.widgets.cpu, "CPU: $1% | ")
+
+-- Pacman updates
+pacup = widget({ type = "textbox" })
+vicious.register(pacup, vicious.widgets.pkg, " | $1 updates | ", 1801, "Arch")
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
 
 -- Create a textclock widget
 os.setlocale("fr_FR.UTF-8") -- Français
-mytextclock = awful.widget.textclock({ align = "right" }," :: %a %d %b  %H:%M ")
+os.setlocale("C", "numeric")
+--mytextclock = awful.widget.textclock({ align = "right" }," | %a %d %b  %H:%M ")
+
+local util = require("awful.util")
+local button = require("awful.button")
+local calendar = nil
+local offset = 0
+
+function remove_calendar()
+   if calendar ~= nil then
+      naughty.destroy(calendar)
+      calendar = nil
+      offset = 0
+   end
+end
+
+function add_calendar(inc_offset)
+   local save_offset = offset
+   remove_calendar()
+   offset = save_offset + inc_offset
+   local datespec = os.date("*t")
+   day = datespec.day
+   datespec = datespec.year * 12 + datespec.month - 1 + offset
+   datespec = (datespec % 12 + 1) .. " " .. math.floor(datespec / 12)
+   local cal = awful.util.pread("cal -m -1 " .. datespec)
+   cal = string.gsub(cal, "%s(" .. day .. ")%s", " <span color='#ff8800'>%1</span> ")
+   calendar = naughty.notify({
+                text = string.format('<span font_desc="%s">%s</span>', "monospace", cal),
+                timeout = 0, hover_timeout = 0.5,
+                width = 160,
+                 })
+end
+mytextclock = awful.widget.textclock({ align = "right" }, " | %a %e %b %Y | %H:%M | ", 10)
+--mytextclock = awful.widget.textclock({ align = "right" }, "%a %e %b %Y %T ", 1)
+mytextclock:add_signal("mouse::enter", function()
+                      add_calendar(0)
+                       end)
+mytextclock:add_signal("mouse::leave", remove_calendar)
+
+mytextclock:buttons(util.table.join(
+               button({ }, 3, function () add_calendar(-1) end), -- RIGHT MOUSE: clear highlight
+               button({ }, 1, function () add_calendar(1) end) -- LEFT MOUSE: toggle state
+         ))
 
 --  Network usage widget
  -- Initialize widget
  netwidget = widget({ type = "textbox" })
  -- Register widget
- vicious.register(netwidget, vicious.widgets.net, 'NET: <span color="#C81717">${wlan0 down_kb}</span> <span color="#171CC8">${wlan0 up_kb}</span> :: ', 3)
+ vicious.register(netwidget, vicious.widgets.net, 'NET: <span color="#C81717">${eth0 down_kb}</span> <span color="#171CC8">${eth0 up_kb}</span> | ', 3)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -241,16 +284,17 @@ for s = 1, screen.count() do
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-	batwidget,
+	--batwidget,
         mylayoutbox[s],
-        mymail,
+        --mymail,
         s == 1 and mysystray or nil,
         mytextclock,
-        tb_volume,
+        --tb_volume,
 		memwidget,
 		netwidget,
-		cpuwidget,
-		battwidget,
+        cpuwidget,
+        pacup,
+		--battwidget,
 		--batinfo,
 		--cputemp,
         mytasklist[s],
@@ -275,9 +319,9 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
 	awful.key({ modkey, "Control" }, "s",      function (c) c.sticky = not c.sticky  end),
 	awful.key({modkey}, "e", revelation),
-	awful.key({ }, "XF86AudioRaiseVolume", function () volume("up", tb_volume) end),
-	awful.key({ }, "XF86AudioLowerVolume", function () volume("down", tb_volume) end),
-	awful.key({ }, "XF86AudioMute", function () volume("mute", tb_volume) end),
+	--awful.key({ }, "XF86AudioRaiseVolume", function () volume("up", tb_volume) end),
+	--awful.key({ }, "XF86AudioLowerVolume", function () volume("down", tb_volume) end),
+	--awful.key({ }, "XF86AudioMute", function () volume("mute", tb_volume) end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -456,8 +500,14 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("focus",  function(c) c.border_color = beautiful.border_focus 
+                                c.border_color = beautiful.border_focus
+                                c.opacity = 1
+                            end)
+client.add_signal("unfocus",    function(c) c.border_color = beautiful.border_normal 
+                                    c.border_color = beautiful.border_normal
+                                    c.opacity = 0.8 
+                                end)
 -- }}}
 
 
