@@ -132,7 +132,7 @@ separator.text, spacer.text = "  ", " "
 arch_img = widget({ type = "imagebox" })
 arch_img.image = image(beautiful.widget_pacman)
 
--- Create Volume Control Widget
+-- Volume Control Widget
 --sound_img = widget({ type = "imagebox" })
 --sound_img.image = image(beautiful.widget_sound)
  --tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
@@ -147,10 +147,6 @@ arch_img.image = image(beautiful.widget_pacman)
 --tb_volume_timer = timer({ timeout = 10 })
 --tb_volume_timer:add_signal("timeout", function () volume("update", tb_volume) end)
 --tb_volume_timer:start()
-
--- Assign a hook to update temperature
-
--- Create a battery status Widget
 
 -- Battery widget
 bat_img = widget({ type = "imagebox" })
@@ -184,7 +180,6 @@ clock_img = widget({ type = "imagebox" })
 clock_img.image = image(beautiful.widget_clock)
 os.setlocale("fr_FR.UTF-8") -- Français
 os.setlocale("C", "numeric")
---mytextclock = awful.widget.textclock({ align = "right" }," | %a %d %b  %H:%M ")
 
 local util = require("awful.util")
 local button = require("awful.button")
