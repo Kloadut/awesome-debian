@@ -43,16 +43,16 @@ channel = "Master"
              --local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
              --local status = fd:read("*all")
              --fd:close()
- 
+
 		--local volume = string.match(status, "(%d?%d?%d)%%")
 		--volume = string.format("% 3d", volume)
- 
+
 		--status = string.match(status, "%[(o[^%]]*)%]")
- 
+
 		--if string.find(status, "on", 1, true) then
-			--volume = "Vol:<span color='green'>" .. volume .. "</span>% "
+			--volume = "<span color='green'>" .. volume .. "</span>% "
 		--else
-			--volume = "Vol:<span color='red'>" .. volume .. "</span>M "
+			--volume = "<span color='red'>" .. volume .. "</span>M "
 		--end
 		--widget.text = volume
 	--elseif mode == "up" then
@@ -88,12 +88,12 @@ layouts = {
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-    names = { "Main", "Web", "Dev","IM", "Zik", "|"},
-    layout = { layouts[3], layouts[3], layouts[3], layouts[2], layouts[3], layouts[3]}
+    names = { "Main", "Web", "Dev","IM", "Zik"},
+    layout = { layouts[3], layouts[3], layouts[3], layouts[2], layouts[3]}
     }
 tagss = {
-    names = { "Files", "Term", "VM","Monitor", "|"},
-    layout = { layouts[3], layouts[3], layouts[3], layouts[2], layouts[3]}
+    names = { "Files", "Term", "VM","Monitor"},
+    layout = { layouts[3], layouts[3], layouts[3], layouts[2]}
     }
 --for s = 1, screen.count() do
     -- Each screen has its own tag table.
@@ -117,15 +117,24 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
                                   }
                         })
 
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+mylauncher = awful.widget.launcher({ image = image(beautiful.widget_arch),
                                      menu = mymainmenu })
 -- }}}
 
 -- {{{ Wibox
 
--- Create CPU Temp Widget
+-- Separators
+spacer = widget({ type = "textbox" })
+separator = widget({ type = "textbox" })
+separator.text, spacer.text = "  ", " "
+
+-- Arch icon
+arch_img = widget({ type = "imagebox" })
+arch_img.image = image(beautiful.widget_pacman)
 
 -- Create Volume Control Widget
+--sound_img = widget({ type = "imagebox" })
+--sound_img.image = image(beautiful.widget_sound)
  --tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
  --tb_volume:buttons(awful.util.table.join(
 	--awful.button({ }, 4, function () volume("up", tb_volume) end),
@@ -133,38 +142,46 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 	--awful.button({ }, 1, function () volume("mute", tb_volume) end)
  --))
  --volume("update", tb_volume)
- 
+
 -- refresh the Volume Control Widget
 --tb_volume_timer = timer({ timeout = 10 })
 --tb_volume_timer:add_signal("timeout", function () volume("update", tb_volume) end)
 --tb_volume_timer:start()
 
 -- Assign a hook to update temperature
-    
+
 -- Create a battery status Widget
 
 -- Battery widget
+bat_img = widget({ type = "imagebox" })
+bat_img.image = image(beautiful.widget_bat)
 battwidget = widget({ type = "textbox" })
-vicious.register(battwidget, vicious.widgets.bat, ' || Bat: $1$2% | ', 61, 'BAT1')
+vicious.register(battwidget, vicious.widgets.bat, '$1$2%', 61, 'BAT1')
 
--- Initialize widget
+-- Memory widget
+mem_img = widget({ type = "imagebox" })
+mem_img.image = image(beautiful.widget_mem)
 memwidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(memwidget, vicious.widgets.mem, "RAM: $2MB ", 13)
+vicious.register(memwidget, vicious.widgets.mem, "$2mb", 13)
 
--- Initialize widget
+-- CPU widget
+cpu_img = widget({ type = "imagebox" })
+cpu_img.image = image(beautiful.widget_cpu)
 cpuwidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "CPU: $1% | ")
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")
 
 -- Pacman updates
+pac_img = widget({ type = "imagebox" })
+pac_img.image = image(beautiful.widget_pacman)
 pacup = widget({ type = "textbox" })
-vicious.register(pacup, vicious.widgets.pkg, " | $1 updates | ", 1801, "Arch")
+vicious.register(pacup, vicious.widgets.pkg, "$1", 1801, "Arch")
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
 
 -- Create a textclock widget
+clock_img = widget({ type = "imagebox" })
+clock_img.image = image(beautiful.widget_clock)
 os.setlocale("fr_FR.UTF-8") -- Français
 os.setlocale("C", "numeric")
 --mytextclock = awful.widget.textclock({ align = "right" }," | %a %d %b  %H:%M ")
@@ -198,7 +215,7 @@ function add_calendar(inc_offset)
                 width = 160,
                  })
 end
-mytextclock = awful.widget.textclock({ align = "right" }, " | %a %e %b %Y | %H:%M | ", 10)
+mytextclock = awful.widget.textclock({ align = "right" }, "%H:%M", 10)
 --mytextclock = awful.widget.textclock({ align = "right" }, "%a %e %b %Y %T ", 1)
 mytextclock:add_signal("mouse::enter", function()
                       add_calendar(0)
@@ -211,10 +228,12 @@ mytextclock:buttons(util.table.join(
          ))
 
 --  Network usage widget
- -- Initialize widget
- netwidget = widget({ type = "textbox" })
- -- Register widget
- vicious.register(netwidget, vicious.widgets.net, 'NET: <span color="#C81717">${eth0 down_kb}</span> <span color="#171CC8">${eth0 up_kb}</span> | ', 3)
+netup_img = widget({ type = "imagebox" })
+netup_img.image = image(beautiful.widget_up)
+netdown_img = widget({ type = "imagebox" })
+netdown_img.image = image(beautiful.widget_down)
+netwidget = widget({ type = "textbox" })
+vicious.register(netwidget, vicious.widgets.net, '<span color="#C81717">${eth0 down_kb}</span> <span color="#5b8bbe">${eth0 up_kb}</span>', 3)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -279,25 +298,25 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
+            spacer,
             mylauncher,
+            spacer,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-	--batwidget,
         mylayoutbox[s],
         --mymail,
-        s == 1 and mysystray or nil,
-        mytextclock,
-        --tb_volume,
-		memwidget,
-		netwidget,
-        cpuwidget,
-        pacup,
-		--battwidget,
-		--batinfo,
-		--cputemp,
-        mytasklist[s],
+        s == 1 and mysystray or nil, separator,
+        mytextclock, clock_img, separator,
+        --tb_volume, sound_img, separator,
+		memwidget, mem_img, separator,
+		netup_img, netwidget, netdown_img, separator,
+        cpuwidget, cpu_img, separator,
+		--battwidget, bat_img, separator,
+		--cputemp, separator,
+        spacer, pacup, pac_img, spacer,
+        mytasklist[s], separator,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -500,13 +519,13 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus",  function(c) c.border_color = beautiful.border_focus 
+client.add_signal("focus",  function(c) c.border_color = beautiful.border_focus
                                 c.border_color = beautiful.border_focus
                                 c.opacity = 1
                             end)
-client.add_signal("unfocus",    function(c) c.border_color = beautiful.border_normal 
+client.add_signal("unfocus",    function(c) c.border_color = beautiful.border_normal
                                     c.border_color = beautiful.border_normal
-                                    c.opacity = 0.8 
+                                    c.opacity = 0.8
                                 end)
 -- }}}
 

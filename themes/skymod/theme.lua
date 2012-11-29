@@ -19,7 +19,7 @@ theme.fg_focus      = "#e0e0e0"
 theme.fg_urgent     = "#e0e0e0"
 theme.fg_minimize   = "#e0e0e0"
 
-theme.border_width  = "2"
+theme.border_width  = "4"
 theme.border_normal = "#3C3C3C"
 theme.border_focus  = "#5b8bbe"
 theme.border_marked = "#3C3C3C"
@@ -73,6 +73,20 @@ theme.titlebar_maximized_button_normal_inactive = "/usr/share/awesome/themes/def
 theme.titlebar_maximized_button_focus_inactive = "/usr/share/awesome/themes/default/titlebar/maximized_focus_inactive.png"
 theme.titlebar_maximized_button_normal_active = "/usr/share/awesome/themes/default/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active = "/usr/share/awesome/themes/default/titlebar/maximized_focus_active.png"
+
+theme.widget_mail = os.getenv("HOME") .. "/.config/awesome/themes/skymod/mail.png"
+theme.widget_music = os.getenv("HOME") .. "/.config/awesome/themes/skymod/music.png"
+theme.widget_arch = os.getenv("HOME") .. "/.config/awesome/themes/skymod/arch_10x10.png"
+theme.widget_cpu = os.getenv("HOME") .. "/.config/awesome/themes/skymod/cpu.png"
+theme.widget_mem = os.getenv("HOME") .. "/.config/awesome/themes/skymod/mem.png"
+theme.widget_down = os.getenv("HOME") .. "/.config/awesome/themes/skymod/net_down_02.png"
+theme.widget_up = os.getenv("HOME") .. "/.config/awesome/themes/skymod/net_up_02.png"
+theme.widget_fs = os.getenv("HOME") .. "/.config/awesome/themes/skymod/diskette.png"
+theme.widget_wifi = os.getenv("HOME") .. "/.config/awesome/themes/skymod/wifi.png"
+theme.widget_sound = os.getenv("HOME") .. "/.config/awesome/themes/skymod/spkr_01.png"
+theme.widget_pacman = os.getenv("HOME") .. "/.config/awesome/themes/skymod/pacman.png"
+theme.widget_clock = os.getenv("HOME") .. "/.config/awesome/themes/skymod/clock.png"
+theme.widget_bat = os.getenv("HOME") .. "/.config/awesome/themes/skymod/bat_full_02.png"
 
 return theme
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80
